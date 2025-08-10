@@ -20,3 +20,13 @@ Pendule offered a comprehensive set of tools, including:
 - **Miscellaneous Tools**: Show passwords, remove cookies for the current site, display window and viewport size, resize the browser to various screen sizes, and display a ruler.
 
 Pendule aimed to simplify common developer tasks by providing handy features not originally available in Chrome’s developer toolbox.
+
+---
+
+## Legacy Availability
+
+Pendule was originally available at:  
+https://chrome.google.com/extensions/detail/gbkffbkamcejhkcaocmkdeiiccpmjfdi
+
+Later it was moved to the Chrome Web Store:  
+https://chrome.google.com/webstore/detail/pendule/gbkffbkamcejhkcaocmkdeiiccpmjfdi
