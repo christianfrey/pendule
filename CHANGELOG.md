@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.0.0 - 2011-06-01
+- Complete rewrite of the extension.
+
 ## 0.0.10 - 2010-03-15
 - **Feature:** shortcuts are customizable and can be disabled.
 - **Shortcut:** ESC key now turns off the color picker and the ruler element.

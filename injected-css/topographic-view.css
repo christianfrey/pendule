@@ -1,0 +1,17 @@
+﻿body {background:#000 !important;border-color:#000 !important;color:#fff !important}
+body * {background:#111 !important;border-color:#111 !important;color:#fff !important}
+body * * {background:#222 !important;border-color:#222 !important;color:#fff !important}
+body * * * {background:#333 !important;border-color:#333 !important;color:#fff !important}
+body * * * * {background:#444 !important;border-color:#444 !important;color:#fff !important}
+body * * * * * {background:#555 !important;border-color:#555 !important;color:#fff !important}
+body * * * * * * {background:#666 !important;border-color:#666 !important;color:#fff !important}
+body * * * * * * * {background:#777 !important;border-color:#777 !important;color:#fff !important}
+body * * * * * * * * {background:#888 !important;border-color:#888 !important;color:#fff !important}
+body * * * * * * * * * {background:#999 !important;border-color:#999 !important;color:#fff !important}
+body * * * * * * * * * * {background:#aaa !important;border-color:#aaa !important;color:#000 !important}
+body * * * * * * * * * * * {background:#bbb !important;border-color:#bbb !important;color:#000 !important}
+body * * * * * * * * * * * * {background:#ccc !important;border-color:#ccc !important;color:#000 !important}
+body * * * * * * * * * * * * * {background:#ddd !important;border-color:#ddd !important;color:#000 !important}
+body * * * * * * * * * * * * * * {background:#eee !important;border-color:#eee !important;color:#000 !important}
+body * * * * * * * * * * * * * * * {background:#fff !important;border-color:#fff !important;color:#000 !important}
+body * * * * * * * * * * * * * * * * {background:#fcc !important;border-color:#fcc !important;color:#000 !important}

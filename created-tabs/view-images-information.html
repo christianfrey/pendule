@@ -1,0 +1,194 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title></title>
+<style type="text/css">
+body   {
+  font: 11px Verdana, "DejaVu Sans", "Bitstream Vera Sans", Geneva, sans-serif; 
+  margin: 15px 30px;
+}
+#title {
+  display: inline-block;
+  padding: 5px 10px;
+  margin: 0 10px 10px 0;
+  font-size: 13px;
+  color: #6d6d67;
+  text-shadow: 1px 1px 0 rgba(255,255,255,.25);
+  background: #eee url(/img/folder-images.png) 7px center no-repeat;
+  text-indent: 20px;
+  border-radius: 5px;
+}
+table {
+  width: 100%;
+  margin-bottom: 7px;
+  border-collapse: collapse;
+  border: 1px solid #ccc;
+}
+table img {
+  box-shadow: 1px 1px 15px #555;
+  margin: 10px 0;
+}
+table a {
+  color: #000;
+  max-width: 900px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+table th {
+  width: 180px;
+  text-align: right;
+  padding: 5px;
+  color: #6d6d67;
+  font-size: 12px;
+  text-shadow: 1px 1px 0 rgba(255,255,255,.25);
+  background-color: #eaeae2;
+}
+table td {
+  border-bottom: 1px solid #eee;
+  padding: 0 10px;
+}
+table td span.grey {
+  color: #888;
+}
+table tr:last-child td {
+  border-bottom: 0;
+}
+</style>
+<script type="text/javascript">
+chrome.extension.onConnect.addListener(function(port) {
+  port.onMessage.addListener(function(msg) {
+    displayImages(msg.sURL, msg.aImages);
+    port.disconnect();
+  });
+});
+function displayImages(sURL, aImages) {
+  var l = aImages.length, oImage = null,
+      oTitle = document.getElementById('title'),
+      oTemp = null,
+      img = null, table = null,
+      tr = null, th = null, td = null, a = null;
+  
+  document.title = 'Images - ' + sURL;
+  oTitle.innerText = l + ' image' + (l > 1 ? 's' : '');
+  
+  for (var i = 0; i < l; i++) {
+    oImage = aImages[i];
+    table = document.createElement('table');
+    
+    tr = document.createElement('tr');
+    th = document.createElement('th');
+    td = document.createElement('td');
+    img = document.createElement('img');
+    th.innerText = oImage.type;
+    img.src = oImage.src;
+    td.appendChild(img);
+    tr.appendChild(th);
+    tr.appendChild(td);
+    table.appendChild(tr);
+    
+    tr = document.createElement('tr');
+    th = document.createElement('th');
+    td = document.createElement('td');
+    a = document.createElement('a');
+    th.innerText = 'Source';
+    a.href = oImage.src;
+    a.title = oImage.src;
+    a.target = '_blank';
+    a.innerText = oImage.src;
+    td.appendChild(a);
+    tr.appendChild(th);
+    tr.appendChild(td);
+    table.appendChild(tr);
+    
+    tr = document.createElement('tr');
+    th = document.createElement('th');
+    td = document.createElement('td');
+    th.innerText = 'Dimensions';
+    td.innerText = oImage.naturalWidth + ' x ' + oImage.naturalHeight + ' pixels';
+    tr.appendChild(th);
+    tr.appendChild(td);
+    table.appendChild(tr);
+    
+    if (oImage.alt) {
+      tr = document.createElement('tr');
+      th = document.createElement('th');
+      td = document.createElement('td');
+      th.innerText = 'Alt attribute';
+      td.innerText = oImage.alt;
+      tr.appendChild(th);
+      tr.appendChild(td);
+      table.appendChild(tr);
+    }
+    
+    if (oImage.title) {
+      tr = document.createElement('tr');
+      th = document.createElement('th');
+      td = document.createElement('td');
+      th.innerText = 'Title attribute';
+      td.innerText = oImage.title;
+      tr.appendChild(th);
+      tr.appendChild(td);
+      table.appendChild(tr);
+    }
+    
+    // Content-length + Content-type
+    addImageInfo(oImage.src, table);
+    
+    document.body.appendChild(table);
+  }
+}
+function addImageInfo(sURL, oTable) {
+  var xhr = new XMLHttpRequest(),
+      tr = null, th = null, td = null,
+      sSize = null, sType = null,
+      iBytes = null, iKB = null, iMB = null, iGB = null;
+  
+  xhr.open('head', sURL, true);
+  xhr.send(null);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      sSize = xhr.getResponseHeader('Content-length');
+      sType = xhr.getResponseHeader('Content-type');
+      
+      iBytes = parseInt(sSize, 10);
+      iKB = iBytes/1024;
+      iMB = iBytes/1024/1024;
+      iGB = iBytes/1024/1024/1024;
+      
+      sSize = iBytes + ' bytes';
+      if (iGB > 1)
+          sSize += ' <span class="grey">(' + iGB.toFixed(2) + ' GB)</span>';
+      else if (iMB > 1)
+          sSize += ' <span class="grey">(' + iMB.toFixed(2) + ' MB)</span>';
+      else if (iKB > 1)
+          sSize += ' <span class="grey">(' + iKB.toFixed(2) + ' KB)</span>';
+      
+      tr = document.createElement('tr');
+      th = document.createElement('th');
+      td = document.createElement('td');
+      th.innerText = 'Size';
+      td.innerHTML = sSize;
+      tr.appendChild(th);
+      tr.appendChild(td);
+      oTable.appendChild(tr);
+      
+      tr = document.createElement('tr');
+      th = document.createElement('th');
+      td = document.createElement('td');
+      th.innerText = 'Type';
+      td.innerText = sType;
+      tr.appendChild(th);
+      tr.appendChild(td);
+      oTable.appendChild(tr);
+    }
+  }
+}
+</script>
+</head>
+<body>
+  <span id="title"></span>
+</body>
+</html>

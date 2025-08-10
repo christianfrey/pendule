@@ -1,0 +1,147 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title></title>
+<base target="_blank">
+<style type="text/css">
+/*
+ * Copyright (C) 2006, 2007, 2008 Apple Inc.  All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * 1.  Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ * 2.  Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in the
+ *     documentation and/or other materials provided with the distribution.
+ * 3.  Neither the name of Apple Computer, Inc. ("Apple") nor the names of
+ *     its contributors may be used to endorse or promote products derived
+ *     from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY APPLE AND ITS CONTRIBUTORS "AS IS" AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL APPLE OR ITS CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+body {
+  margin: 0;
+}
+table {
+  border-spacing: 0px 0px;
+  counter-reset: lines 0;
+  font-family: monospace;
+  font-size: initial;
+  margin: 0px;
+  white-space: pre-wrap !important;
+  width: 100%;
+  word-break: break-word;
+}
+.webkit-line-gutter-backdrop {
+  height: 100%;
+  left: 0px;
+  position: absolute;
+  top: 0px;
+  z-index: -1;
+}
+.webkit-line-gutter-backdrop, .webkit-line-number {
+  -webkit-box-sizing: border-box;
+  -webkit-user-select: none;
+  background-color: #F0F0F0;
+  border-right: 1px solid #bbb;
+  padding: 0px 4px;
+  width: 31px;
+}
+.webkit-line-number {
+  vertical-align: baseline;
+  color: gray;
+  font-family: Helvetica;
+  font-size: 9px;
+  text-align: right;
+  white-space: nowrap;
+  word-break: normal;
+}
+.webkit-line-number::before {
+  content: counter(lines);
+  counter-increment: lines 1;
+  -webkit-user-select: none;
+}
+.webkit-line-content {
+  vertical-align: baseline;
+  padding: 0 5px;
+}
+.webkit-html-comment {
+  color: #236e25;
+}
+.webkit-html-tag {
+  color: #881280;
+}
+.webkit-html-attribute-name {
+  color: #994500;
+}
+.webkit-html-attribute-value {
+  color: #1a1aa6;
+}
+.webkit-html-doctype {
+  color: rgb(192, 192, 192);
+}
+.webkit-html-external-link, .webkit-html-resource-link {
+  color: #00e;
+}
+.webkit-html-external-link {
+  text-decoration: none;
+}
+.webkit-html-external-link:hover {
+  text-decoration: underline;
+}
+</style>
+<script type="text/javascript">
+chrome.extension.onConnect.addListener(function(port) {
+  port.onMessage.addListener(function(msg) {
+    displaySource(msg.sURL, msg.sSource, msg.sType);
+    port.disconnect();
+  });
+});
+function displaySource(sURL, sSource, sType) {
+  document.title = (sType === 'selection' ? 'Selection' : 'Generated') +
+    ' source - ' + sURL;
+  
+  var base = document.createElement('base');
+  base.setAttribute('href', sURL);
+  document.head.appendChild(base);
+  
+  var div = document.createElement('div');
+  div.className = 'webkit-line-gutter-backdrop';
+  document.body.appendChild(div);
+  
+  var lines = sSource.split("\n");
+  var table = document.createElement('table');
+  var tbody = document.createElement('tbody');
+  
+  for (var i = 0; i < lines.length; i++) {
+    var tr = document.createElement('tr');
+    var tdNumber = document.createElement('td');
+    var tdContent = document.createElement('td');
+    tdNumber.className = 'webkit-line-number';
+    tdContent.className = 'webkit-line-content';
+    tdContent.innerHTML = (lines[i] === ''? ' ': lines[i]);
+    tr.appendChild(tdNumber);
+    tr.appendChild(tdContent);
+    tbody.appendChild(tr);
+  }
+  table.appendChild(tbody);
+  document.body.appendChild(table);
+}
+</script>
+</head>
+<body>
+</body>
+</html>

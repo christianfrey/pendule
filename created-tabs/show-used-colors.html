@@ -1,0 +1,101 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title></title>
+<style>
+body {
+  font: 12px Arial, Helvetica, "Liberation Sans", FreeSans, sans-serif;
+  width: 700px;
+  margin: 15px auto;
+}
+#title {
+  display: inline-block;
+  padding: 5px 10px;
+  margin: 0 10px 10px 0;
+  font-size: 13px;
+  color: #6d6d67;
+  text-shadow: 1px 1px 0 rgba(255,255,255,.25);
+  background: #eee url(/img/color-swatch.png) 7px center no-repeat;
+  text-indent: 20px;
+  border-radius: 5px;
+}
+#colors {
+  list-style: none;
+  display: block;
+  margin: 0;
+  padding: 15px 10px 5px 10px;
+  background-color: #fafafa;
+  box-shadow: rgba(0,0,0,.25) 0 .5px 7px;
+  border-radius: 7px;
+}
+#colors li {
+  display: inline-block;
+  vertical-align: top; /* rgba height */
+  width: 20%;
+}
+#colors li .strip {
+  padding: 10px 0;
+  margin: 0 7px;
+  border: 2px solid #fff;
+  box-shadow: 1px 1px 7px #555;
+}
+#colors li .info {
+  color: #484848;
+  padding: 5px 12px 10px 12px;
+}
+#colors li .info p {
+  margin: 0;
+  text-indent: 2px;
+}
+</style>
+<script>
+chrome.extension.onConnect.addListener(function(port) {
+  port.onMessage.addListener(function(msg) {
+    displayColors(msg.sURL, msg.aColors);
+    port.disconnect();
+  });
+});
+function displayColors(sURL, aColors) {
+  var l = aColors.length,
+      oTitle = document.getElementById('title'),
+      oColors = document.getElementById('colors'),
+      oLi = null, oStrip = null, oInfo = null,
+      oRGB = null, oHEX = null;
+  
+  document.title = 'Colors - ' + sURL;
+  oTitle.innerText = l + ' color' + (l > 1 ? 's' : '');
+  aColors.sort();
+  
+  for (var i = 0; i < l; i++) {
+    oLi = document.createElement('li');
+    oStrip = document.createElement('div');
+    oInfo = document.createElement('div');
+    oRGB = document.createElement('p');
+    oHEX = document.createElement('p');
+    
+    oStrip.className = 'strip';
+    oStrip.style.backgroundColor = aColors[i];
+    
+    oInfo.className = 'info';
+    oRGB.innerText = aColors[i];
+    oHEX.innerText = colorToHex(aColors[i]);
+    
+    oLi.appendChild(oStrip);
+    oInfo.appendChild(oRGB);
+    oInfo.appendChild(oHEX);
+    oLi.appendChild(oInfo);
+    oColors.appendChild(oLi);
+  }
+}
+function colorToHex(c) {
+  var r = /rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/.exec(c);
+  return r? '#' + (1 << 24 | r[1] << 16 | r[2] << 8 | r[3]).toString(16).toUpperCase().substr(1): c;
+}
+</script>
+</head>
+<body>
+  <span id="title"></span>
+  <ul id="colors"></ul>
+</body>
+</html>

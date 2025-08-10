@@ -1,0 +1,108 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link href="popup.css" rel="stylesheet">
+<script src="popup.js"></script>
+</head>
+<body>
+  <nav>
+    <ul>
+      <li id="tab-stylesheets">style sheets
+      <li id="tab-forms">forms
+      <li id="tab-images">images
+      <li id="tab-miscellaneous">miscellaneous
+      <li id="tab-resize">resize browser
+      <li id="tab-accessibility">accessibility
+    </ul>
+  </nav>
+  <section id="stylesheets">
+    <ul>
+      <li id="view-css">View CSS
+      <li id="reload-css">Reload CSS
+      <li class="sep">
+      <li id="disable-all-styles">Disable all styles
+      <li id="disable-inline-styles">Disable inline styles
+      <li id="disable-embedded-styles">Disable embedded styles
+      <li id="disable-linked-style-sheets">Disable linked style sheets
+      <li class="sep">
+      <li id="show-used-colors">Show used colors
+    </ul>
+  </section>
+  <section id="forms">
+    <ul>
+      <li id="show-passwords">Show passwords
+      <li id="remove-maxlength-attributes">Remove maxlength attributes
+      <li id="convert-select-elements-to-text-inputs">Convert select elements to text inputs
+      <li id="show-hidden-elements">Show hidden elements
+      <li id="clear-radio-buttons">Clear radio buttons
+      <li id="enable-form-elements">Enable form elements
+      <li class="sep">
+      <li id="convert-gets-to-posts">Convert GETs to POSTs
+      <li id="convert-posts-to-gets">Convert POSTs to GETs
+    </ul>
+  </section>
+  <section id="images">
+    <ul>
+      <li id="view-images-information">View images information
+      <li class="sep">
+      <li id="hide-all-images">Hide all images
+      <li id="hide-background-images">Hide background images
+      <li class="sep">
+      <li id="show-alt-text-note">Show alt text
+      <li id="show-dimensions-note">Show dimensions
+      <li id="show-paths-note">Show paths
+    </ul>
+  </section>
+  <section id="miscellaneous">
+    <ul>
+      <li id="view-javascript">View JavaScript
+      <li id="view-generated-source">View generated source
+      <li class="sep">
+      <li id="display-ruler">Display ruler
+      <li id="display-color-picker">Display color picker
+      <li class="sep">
+      <li id="topographic-view">Topographic view
+      <li id="remove-cookies">Remove cookies
+    </ul>
+  </section>
+  <section id="resize">
+    <ul>
+      <li id="display-window-size">Display window and viewport size</li>
+    </ul>
+    <ul class="dimensions">
+      <li id="resize-320x480">320 x 480</li>
+      <li id="resize-640x480">640 x 480</li>
+      <li id="resize-480x800">480 x 800</li>
+      <li id="resize-800x600">800 x 600</li>
+      <li id="resize-1024x768">1024 x 768</li>
+    </ul>
+    <ul class="dimensions">
+      <li id="resize-1280x800">1280 x 800</li>
+      <li id="resize-1280x1024">1280 x 1024</li>
+      <li id="resize-1366x768">1366 x 768</li>
+      <li id="resize-1440x900">1440 x 900</li>
+      <li id="resize-1600x900">1600 x 900</li>
+    </ul>
+    <p>
+      Custom size: <input type="text" id="custom-size-width">&nbsp;x&nbsp;<input type="text" id="custom-size-height">&nbsp;
+      <button id="custom-size">resize</button>
+    </p>
+  </section>
+  <section id="accessibility">
+    <ul>
+      <li id="validate-html">Validate HTML
+      <li id="validate-css">Validate CSS
+      <li class="sep">
+      <li id="validate-links">Validate links
+      <li id="validate-feed">Validate feed
+      <li class="sep">
+      <li id="validate-accessibility">Validate accessibility (WAI)
+      <li class="sep">
+      <li id="validate-local-html">Validate local HTML
+      <li id="validate-local-css">Validate local CSS
+    </ul>
+  </section>
+  <div id="notification"></div>
+</body>
+</html>
