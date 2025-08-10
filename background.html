@@ -1,0 +1,271 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<script>
+var oOptions = {};
+(function () {
+  var a = window.localStorage.options;
+  if (a) oOptions = JSON.parse(a);
+  oOptions.picker_mode = oOptions.picker_mode || 'picker_yes_clipboard';
+  oOptions.wai_mode = oOptions.wai_mode || 'wai_achecker';
+  oOptions.shortcuts = oOptions.shortcuts || true;
+  oOptions.letter_disable_styles = oOptions.letter_disable_styles || 'S';
+  oOptions.letter_reload_styles = oOptions.letter_reload_styles || 'R';
+  oOptions.letter_display_color_picker = oOptions.letter_display_color_picker || 'P'; 
+  window.localStorage.options = JSON.stringify(oOptions);
+}).call();
+
+chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
+  request['type'] == "options" && sendResponse({
+    options: oOptions
+  })
+});
+
+function updateOptions() {
+  oOptions = JSON.parse(window.localStorage.options);
+}
+
+var aItems = [
+  'disable-css',
+  'hide-img',
+  'show-img-alt-text',
+  'show-img-dimensions',
+  'show-img-paths',
+  'color-picker',
+  'display-ruler',
+  'topographic-view'
+];
+
+initStorage();
+
+function initStorage() {
+  var i, l = aItems.length;
+  for (i = 0; i < l; i++) {
+    localStorage.setItem(aItems[i], '');
+  }
+}
+
+function delStorage(tabId) {
+  var i, l = aItems.length;
+  for (i = 0; i < l; i++) {
+    storage.del(aItems[i], tabId);
+  }
+}
+
+chrome.tabs.onUpdated.addListener(function(tabId, props, tab) {
+  if (props.status == 'loading') { delStorage(tabId); }
+});
+chrome.tabs.onRemoved.addListener(function(tabId) {
+  delStorage(tabId);
+});
+
+var storage = {
+  add: function(itemid, tabid) {
+    var a = localStorage.getItem(itemid).split(',');
+    a.unshift(tabid);
+    localStorage.setItem(itemid, a);
+  },
+  del: function(itemid, tabid) {
+    var a = localStorage.getItem(itemid).split(',');
+    for (var i = 0; i < a.length; i++) {
+      if (a[i] == tabid)
+        a.splice(i, 1);
+    }
+    localStorage.setItem(itemid, a);
+  },
+  into: function(itemid, tabid) {
+    var a = localStorage.getItem(itemid).split(',');
+    for (var i = 0; i < a.length; i++) {
+      if (a[i] == tabid)
+        return true;
+    }
+  }
+};
+
+chrome.extension.onRequest.addListener(
+  function(request, sender, sendResponse) {
+    if (request.msg === 'click' && storage.into('color-picker', sender.tab.id)) {
+      chrome.tabs.captureVisibleTab(null, function(dataUrl) {
+        var img = new Image();
+        img.src = dataUrl;
+        img.onload = function() {
+          var canvas = document.createElement('canvas');
+          canvas.width = img.naturalWidth;
+          canvas.height = img.naturalHeight;
+          
+          var ctx = canvas.getContext('2d');
+          ctx.clearRect(0, 0, img.naturalWidth, img.naturalHeight);
+          ctx.drawImage(img, 0, 0);
+          
+          var pixel = ctx.getImageData(request.x, request.y, 1, 1).data;
+          var rgbColor = 'rgb(' + pixel[0] + ',' + pixel[1] + ',' + pixel[2] + ')';
+          var hexColor = '#' + rgb2hex(pixel[0], pixel[1], pixel[2]);
+          
+          var setColor = 'document.getElementById("pendule-color-picker-color").style.backgroundColor="' + rgbColor + ' !important";';
+          setColor += 'document.getElementById("pendule-color-picker-rgb").innerText="' + rgbColor + '";';
+          setColor += 'document.getElementById("pendule-color-picker-hex").innerText="' + hexColor + '";';
+          
+          // copy to clipboard
+          if (oOptions.picker_mode == 'picker_yes_clipboard') {
+            var i = document.getElementById('picked_color');
+            i.value = hexColor;
+            i.select();
+            document.execCommand('copy', false, null);
+          }
+          
+          chrome.tabs.executeScript(null, {code: setColor});
+        }
+      });
+    } else if (request.msg === 'view-css' || request.msg === 'view-scripts') {
+      var inline = request.inline;
+      var external = request.external;
+      chrome.tabs.getSelected(null, function(tab) {
+        var oldUrl = tab.url;
+        var blankUrl = chrome.extension.getURL('blank.html');
+        chrome.tabs.create({url: blankUrl, index: tab.index+1}, function(tab) {
+          var tabs =  chrome.extension.getExtensionTabs();
+          for (var i = 0; i < tabs.length; i++) {
+            var tab = tabs[i];
+            if (tab.location.href == blankUrl && !tab.dataAlreadySet) {
+              if (request.msg === 'view-css') {
+                tab.printStyles(oldUrl, inline, external);
+              } else {
+                tab.printScripts(oldUrl, inline, external);
+              }
+              tab.dataAlreadySet = true;
+              break;
+            }
+          }
+        });
+      });
+    } else if (request.msg === 'view-images') {
+      chrome.tabs.getSelected(null, function(tab) {
+        var oldUrl = tab.url;
+        var blankUrl = chrome.extension.getURL('blank.html');
+        chrome.tabs.create({url: blankUrl, index: tab.index+1}, function(tab) {
+          var tabs =  chrome.extension.getExtensionTabs();
+          for (var i = 0; i < tabs.length; i++) {
+            var tab = tabs[i];
+            if (tab.location.href == blankUrl && !tab.dataAlreadySet) {
+              tab.printImages(oldUrl, request.images);
+              tab.dataAlreadySet = true;
+              break;
+            }
+          }
+        });
+      });
+    } else if (request.msg === 'view-selection-source' || request.msg === 'view-generated-source') {
+      chrome.tabs.getSelected(null, function(tab) {
+        var oldUrl = tab.url;
+        var blankUrl = chrome.extension.getURL('blank.html');
+        chrome.tabs.create({url: blankUrl, index: tab.index+1}, function(tab) {
+          var tabs =  chrome.extension.getExtensionTabs();
+          for (var i = 0; i < tabs.length; i++) {
+            var tab = tabs[i];
+            if (tab.location.href == blankUrl && !tab.dataAlreadySet) {
+              if (request.msg === 'view-selection-source') {
+                tab.printSource(oldUrl, request.code, true);
+              } else {
+                tab.printSource(oldUrl, request.code, false);
+              }
+              tab.dataAlreadySet = true;
+              break;
+            }
+          }
+        });
+      });
+    } else if (request.msg === 'toggle-css') {
+      toggleCSS(sender.tab.id, sender.tab.url);
+    } else if (request.msg === 'toggle-color-picker') {
+      toggleColorPicker(sender.tab.id, sender.tab.url);
+    } else if (request.msg === 'reload-css') {
+      reloadCSS(sender.tab.id, sender.tab.url);
+    } else if (request.msg === 'turn-off') {
+      turnOff(sender.tab.id, sender.tab.url);
+    }
+  }
+);
+
+function turnOff(tabid, taburl) {
+  if (!isUrl(taburl)) return;
+  var js_file = {};
+  js_file.allFrames = true;
+  if (storage.into('color-picker', tabid)) {
+    js_file.file = 'inject/undo_color-picker.js';
+    chrome.tabs.executeScript(tabid, js_file, function() {
+      storage.del('color-picker', tabid);
+    });
+  }
+  if (storage.into('display-ruler', tabid)) {
+    js_file.file = 'inject/undo_display-ruler.js';
+    chrome.tabs.executeScript(tabid, js_file, function() {
+      storage.del('display-ruler', tabid);
+    });
+  }
+}
+
+function toggleCSS(tabid, taburl) {
+  if (!isUrl(taburl)) return;
+  var js_file = {};
+  js_file.allFrames = true;
+  if (!storage.into('disable-css', tabid)) {
+    js_file.file = 'inject/do_disable-css.js';
+    chrome.tabs.executeScript(tabid, js_file, function() {
+      storage.add('disable-css', tabid);
+    });
+  } else {
+    js_file.file = 'inject/undo_disable-css.js';
+    chrome.tabs.executeScript(tabid, js_file, function() {
+      storage.del('disable-css', tabid);
+    });
+  }
+}
+
+function toggleColorPicker(tabid, taburl) {
+  if (!isUrl(taburl)) return;
+  var js_file = {};
+  //js_file.allFrames = true;
+  if (!storage.into('color-picker', tabid)) {
+    js_file.file = 'inject/do_color-picker.js';
+    chrome.tabs.executeScript(tabid, js_file, function() {
+      storage.add('color-picker', tabid);
+    });
+  } else {
+    js_file.file = 'inject/undo_color-picker.js';
+    chrome.tabs.executeScript(tabid, js_file, function() {
+      storage.del('color-picker', tabid);
+    });
+  }
+}
+
+function reloadCSS(tabid, taburl) {
+  if (!isUrl(taburl)) return;
+  var js_file = {};
+  js_file.allFrames = true;
+  js_file.file = 'inject/reload-css.js';
+  chrome.tabs.executeScript(tabid, js_file);
+}
+
+function rgb2hex(r, g, b) {
+  var hexVal = function(n) {
+    var data = '0123456789ABCDEF';
+    if (n == null) return '00';
+    n = parseInt(n); 
+    if (n == 0 || isNaN(n)) return '00';
+    n = Math.round(Math.min(Math.max(0, n), 255));
+    return data.charAt((n - n % 16) / 16) + data.charAt(n % 16);
+  };
+  return hexVal(r) + hexVal(g) + hexVal(b);
+}
+
+function isUrl(url) {
+  return (new String(url)).match(/^https?:\/\//i) ? true : false;
+}
+
+var _updateOptions = updateOptions;
+</script>
+</head>
+<body>
+<input id="picked_color">
+</body>
+</html>

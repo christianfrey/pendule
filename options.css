@@ -1,0 +1,108 @@
+﻿body {
+  font-size: 12px;
+  font-family: helvetica,arial,sans-serif;
+  margin: 8px;
+  background-color: #fff
+}
+#header {
+  background: url(img/icon128.png) 0 0 no-repeat;
+  -webkit-background-size: 64px;
+  height: 64px;
+  margin-bottom: 15px
+}
+#header h1 {
+  margin: 0;
+  font-size: 22px;
+  padding: 15px 0 0 75px
+}
+#header small {
+  font-size: 12px;
+  font-weight: bold;
+  padding-left: 75px
+}
+h3 {
+  font-size: 13px;
+  color: #fafafa;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#3f3f3f), to(#616161));
+  border-top: 1px solid #000;
+  padding: 2px 1em;
+  margin: 1.2em 0 .5em 0
+}
+p {
+  margin-left: 20px
+}
+.info {
+  background: url(img/information.png) no-repeat;
+  padding-left: 20px
+}
+ul {
+  padding-left: 20px
+}
+li {
+  margin-left: 30px
+}
+abbr[title] {
+  border-bottom: thin dotted
+}
+dl {
+  margin: 15px 20px
+}
+dd {
+  margin-left: 0
+}
+dd > ul {
+  margin-top: 5px;
+  padding-left: 0
+}
+code {
+  color: #007000
+}
+.key {
+  font-family: monospace;
+  background: #eee;
+  border-color: #ccc #aaa #888 #bbb;
+  border-style: solid;
+  border-width: 1px 3px 3px 1px;
+  padding: 1px 2px
+}
+.option_row {
+  clear: left;
+  padding: 10px 0 0 20px
+}
+.option_name {
+  float: left;
+  font-weight: bold;
+  margin-top: 3px;
+  width: 13em
+}
+.option_picker {
+  float: left
+}
+.shortcut_name {
+  background: url(img/keyboard.png) no-repeat 2px 2px;
+  clear: left;
+  float: left;
+  width: 12em;
+  padding: 4px 0 0 23px
+}
+.shortcut_keys {
+  float: left
+}
+.letter {
+  height: 12px;
+  text-align: center;
+  width: 14px;
+  vertical-align: middle
+}
+.buttons {
+  clear: left;
+  padding: 1em 1em 0.2em
+}
+#save_status {
+  background-color: #fff1a8;
+  border-radius: 5px;
+  font-weight: bold;
+  margin-left: 10px;
+  opacity: 0;
+  padding: 3px
+}

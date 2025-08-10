@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<link rel="stylesheet" type="text/css" href="popup.css" />
+<script type="text/javascript" src="popup.js"></script>
+<div>
+  <ul>
+    <li><h2>Style sheets</h2>
+    <li id="view-css" onclick="viewStyles()">View styles
+    <li id="reload-css" onclick="reloadCSS()">Reload CSS
+    <li id="disable-css" onclick="toggleCSS()">Disable CSS
+    <li><h2>JavaScript</h2>
+    <li id="view-scripts" onclick="viewScripts()">View scripts
+  </ul>
+  <ul>
+    <li><h2>Forms</h2>
+    <li id="show-passwords" onclick="showPasswords()">Show passwords
+    <li id="select-tags-to-text-inputs" onclick="selectTagsToTextInputs()">Select tags to text inputs
+    <li id="remove-maxlength" onclick="removeMaxlength()">Remove maxlength
+    <li id="clear-radio-buttons" onclick="clearRadioButtons()">Clear radio buttons
+    <li id="convert-gets-to-posts" onclick="convertGETsToPOSTs()">Convert GETs to POSTs
+    <li id="convert-posts-to-gets" onclick="convertPOSTsToGETs()">Convert POSTs to GETs
+  </ul>
+  <ul>
+    <li><h2>Images</h2>
+    <li id="view-img-details" onclick="viewImgDetails()">View images
+    <li id="hide-img" onclick="hideImages(this)">Hide images
+    <li id="show-img-alt-text" onclick="showImgAltText(this)">Show alt text
+    <li id="show-img-dimensions" onclick="showImgDimensions(this)">Show dimensions
+    <li id="show-img-paths" onclick="showImgPaths(this)">Show paths
+  </ul>
+  <ul>
+    <li><h2>Miscellaneous</h2>
+    <li id="view-source" onclick="viewSource()">View source
+    <li id="view-selection-source" onclick="viewSelectionSource()">View selection source
+    <li id="view-generated-source" onclick="viewGeneratedSource()">View generated source
+    <li id="color-picker" onclick="colorPicker()">Color picker
+    <li id="display-ruler" onclick="displayRuler(this)">Display ruler
+    <li id="topographic-view" onclick="topographicView(this)">Topographic view
+    <li id="options" onclick="viewOptions()">Options
+  </ul>
+  <ul>
+    <li><h2>Accessibility</h2>
+    <li class="newtab" onclick="validateMarkup()">Markup validator
+    <li class="newtab" onclick="validateCSS()">CSS validator
+    <li class="newtab" onclick="checkLinks()">Link checker
+    <li class="newtab" onclick="validateFeed()">Feed validator
+    <li class="newtab" onclick="validateWAI()">WAI validator
+  </ul>
+</div>

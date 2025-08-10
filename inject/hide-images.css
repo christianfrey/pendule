@@ -1,0 +1,9 @@
+﻿html {
+  background-image: none !important
+}
+* {
+  background-image: none !important
+}
+img {
+  visibility: hidden !important
+}
