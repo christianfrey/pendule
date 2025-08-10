@@ -6,6 +6,8 @@ At its peak, Pendule had over 100,000 active users and was recognized as one of 
 
 It was the first extension to offer a fully functional color picker for Chrome, alongside many practical web development tools.
 
+<p align="center"><img src="/assets/screenshot-pendule-1.0.0.jpg" alt="Extension Screenshot"></p>
+
 ## Features
 
 Pendule offered a comprehensive set of tools, including:
